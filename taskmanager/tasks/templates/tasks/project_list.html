@@ -1,0 +1,24 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+
+  <h1 class="text-center mb-5">Projects</h1>
+  
+  {% for project in projects %}
+    <article class="media content-section">
+      <div class="media-body">
+        <h2><a class="article-title" href="{% url 'project_detail' project.pk %}">{{ project.name }}</a></h2>
+        <p class="article-content">{{ project.description }}</p>
+        <p class="text-danger">Due date: {{ project.deadline|date:"F d, Y" }}</p>
+      </div>
+      <div class="btn-outline " role="group" aria-label="Project Actions">
+        <a href="{% url 'project_detail' project.pk %}" class="btn btn-outline-dark mb-4">View</a>
+        <a href="{% url 'project_update' project.pk %}" class="btn btn-outline-dark mb-4">Edit</a>
+        <a href="{% url 'project_delete' project.pk %}" class="btn btn-outline-dark mb-4">Delete</a>
+      </div>
+    </article>
+  {% empty %}
+    <div>No Projects</div>
+  {% endfor %}
+
+{% endblock %}

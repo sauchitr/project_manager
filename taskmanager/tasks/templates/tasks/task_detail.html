@@ -1,0 +1,12 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+  <h1>{{ task.name }}</h1>
+  <p>{{ task.description }}</p>
+  <a class="btn btn-outline-dark mb-4" href="{% url 'task_update' pk=task.pk %}">Update task</a>
+  <form  method="POST" action="{% url 'task_delete' pk=task.pk %}" style="display:inline-block;">
+    {% csrf_token %}
+    <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this task?');">
+  </form>
+  <a class="btn btn-outline-dark mb-4" href="{% url 'project_detail' pk=task.project.pk %}">Back to project</a>
+{% endblock %}

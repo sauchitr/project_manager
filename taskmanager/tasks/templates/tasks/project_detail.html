@@ -1,0 +1,28 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+  <h1 class="text-center mb-5">Tasks</h1>
+  <div class="btn-outline " role="group" aria-label="Project Actions">
+    
+    <a href="{% url 'task_create' project.pk %}" class="btn btn-outline-dark  mb-4">Create Task</a>
+    <a href="{% url 'project_list' %}" class="btn btn-outline-dark mb-4">Back To Projects</a>
+    
+  </div>
+  {% for task in tasks %}
+    <article class="media content-section">
+      <div class="media-body">
+        <h2><a class="article-title">{{ task.name }}</a></h2>
+        <p class="article-content">{{ task.description }}</p>
+        <p class="article-content">Assigned to: {{ task.assigned_to }}</p>
+        <p class="text-danger">Due date: {{ task.due_date|date:"F d, Y" }}</p>
+        <p class="text-danger">Priority Level: {{ task.priority }}</p>
+      </div>
+      <div class="btn-outline " role="group" aria-label="Project Actions">
+        <a href="{% url 'task_update' task.pk %}" class="btn btn-outline-info mb-4">Update</a>
+      </div>
+    </article>
+  {% empty %}
+    <div>No Projects</div>
+  {% endfor %}
+
+{% endblock %}

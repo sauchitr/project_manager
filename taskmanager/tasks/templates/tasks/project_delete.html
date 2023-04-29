@@ -1,0 +1,19 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+  <h1>Are you sure you want to delete "{{ project.name }}"?</h1>
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit">Yes, delete</button>
+    <a href="{% url 'project_detail' project.pk %}">No, cancel</a>
+  </form>
+  <script>
+    const deleteButton = document.querySelector('button[type="submit"]');
+    deleteButton.addEventListener('click', (event) => {
+      const confirmDelete = confirm('Are you sure you want to delete this project? This action cannot be undone.');
+      if (!confirmDelete) {
+        event.preventDefault();
+      }
+    });
+  </script>
+{% endblock %}

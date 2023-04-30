@@ -1,12 +1,17 @@
 {% extends 'tasks/base.html' %}
-
 {% block content %}
-  <h1>{{ task.name }}</h1>
-  <p>{{ task.description }}</p>
-  <a class="btn btn-outline-dark mb-4" href="{% url 'task_update' pk=task.pk %}">Update task</a>
-  <form  method="POST" action="{% url 'task_delete' pk=task.pk %}" style="display:inline-block;">
-    {% csrf_token %}
-    <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this task?');">
-  </form>
-  <a class="btn btn-outline-dark mb-4" href="{% url 'project_detail' pk=task.project.pk %}">Back to project</a>
+  <div class="btn-outline " role="group" aria-label="Project Actions">
+    <a href="{% url 'project_detail' project.pk %}" class="btn btn-outline-dark mb-4">Back To Projects</a>
+  </div>
+    <article class="media content-section">
+      <div class="media-body">
+        <h2 class="article-title">{{ task.name }}</h2>
+        <p class="article-content">{{ task.description }}</p>
+        <p class="article-content">Assigned to: {{ task.assigned_to }}</p>
+        <p class="text-danger">Due date: {{ task.due_date|date:"F d, Y" }}</p>
+        <p class="text-danger">Priority Level: {{ task.priority }}</p>
+      </div>
+      <div class="btn-outline " role="group" aria-label="Project Actions">
+        <a href="{% url 'task_update' task.pk %}" class="btn btn-outline-info mb-4">Update</a>
+      </div>
 {% endblock %}

@@ -5,18 +5,19 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Sum
 
 
 @login_required
 def project_list(request):
-    projects = Project.objects.all()
+    projects = Project.objects.all().order_by('deadline')
     return render(request, 'tasks/project_list.html', {'projects': projects})
 
 
 @login_required
 def project_detail(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    tasks = Task.objects.filter(project=project)
+    tasks = Task.objects.filter(project=project).order_by('due_date')
     return render(request, 'tasks/project_detail.html', {'project': project, 'tasks': tasks})
 
 
@@ -63,6 +64,12 @@ def task_create(request, pk):
     return render(request, 'tasks/task_form.html', {'form': form, 'project': project})
 
 
+def task_detail(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    project = get_object_or_404(Project, pk=task.project.pk)
+    return render(request, 'tasks/task_detail.html', {'task': task, 'project': project})
+
+
 @login_required
 def task_update(request, pk):
     task = get_object_or_404(Task, pk=pk)
@@ -92,3 +99,5 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, "tasks/register.html", {"form": form})
+
+

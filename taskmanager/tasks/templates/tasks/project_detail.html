@@ -16,6 +16,7 @@
       </div>
       <div class="btn-outline " role="group" aria-label="Project Actions">
         <a href="{% url 'task_update' task.pk %}" class="btn btn-outline-info mb-4">Update</a>
+        <a href="{% url 'task_delete' task.pk %}" class="btn btn-outline-danger mb-4">Delete</a>
       </div>
     </article>
   {% empty %}

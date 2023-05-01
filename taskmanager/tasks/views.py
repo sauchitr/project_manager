@@ -15,13 +15,6 @@ def project_list(request):
 
 
 @login_required
-def project_detail(request, pk):
-    project = get_object_or_404(Project, pk=pk)
-    tasks = Task.objects.filter(project=project).order_by('due_date')
-    return render(request, 'tasks/project_detail.html', {'project': project, 'tasks': tasks})
-
-
-@login_required
 def project_create(request):
     form = ProjectForm(request.POST or None)
     if form.is_valid():
@@ -32,12 +25,20 @@ def project_create(request):
 
 
 @login_required
+def project_detail(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    tasks = Task.objects.filter(project=project).order_by('due_date')
+    return render(request, 'tasks/project_detail.html', {'project': project, 'tasks': tasks})
+
+
+@login_required
 def project_update(request, pk):
     project = get_object_or_404(Project, pk=pk)
     form = ProjectForm(request.POST or None, instance=project)
     if form.is_valid():
         project = form.save(commit=False)
         project.save()
+        messages.success(request, f'The project "{project.name}" has been updated.')
         return redirect('project_detail', pk=project.pk)
     return render(request, 'tasks/project_form.html', {'form': form})
 
@@ -75,17 +76,24 @@ def task_update(request, pk):
     task = get_object_or_404(Task, pk=pk)
     project = task.project
     form = TaskForm(request.POST or None, instance=task)
-    if request.method == 'POST':
-        if 'delete' in request.POST:
-            task.delete()
-            return redirect('project_detail', pk=project.pk)
-        elif form.is_valid():
-            task = form.save(commit=False)
-            task.project = project
-            task.save()
-            messages.success(request, f'The task "{task.name}" has been updated.')
-            return redirect('project_detail', pk=project.pk)
+    if form.is_valid():
+        task = form.save(commit=False)
+        task.project = project
+        task.save()
+        messages.success(request, f'The task "{task.name}" has been updated.')
+        return redirect('project_detail', pk=project.pk)
     return render(request, 'tasks/task_form.html', {'form': form, 'project': project})
+
+
+@login_required
+def task_delete(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    project_pk = task.project.pk
+    if request.method == 'POST':
+        task.delete()
+        messages.success(request, f'The task "{task.name}" has been deleted.')
+        return redirect('project_detail', pk=project_pk)
+    return render(request, 'tasks/task_confirm_delete.html', {'task': task})
 
 
 def register(request):
@@ -99,5 +107,3 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, "tasks/register.html", {"form": form})
-
-

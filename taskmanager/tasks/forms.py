@@ -12,7 +12,7 @@ class ProjectForm(forms.ModelForm):
 
 class TaskForm(forms.ModelForm):
     due_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
-    PRIORITY_CHOICES = [    ('H', 'High'),    ('M', 'Medium'),    ('L', 'Low'),]
+    PRIORITY_CHOICES = [    ('High', 'High'),    ('Medium', 'Medium'),    ('Low', 'Low'),]
     priority = forms.ChoiceField(choices=PRIORITY_CHOICES, widget=forms.RadioSelect)
 
     class Meta:

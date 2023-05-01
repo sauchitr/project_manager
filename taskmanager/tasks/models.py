@@ -12,8 +12,8 @@ class Project(models.Model):
 
 
 class Task(models.Model):
-    PRIORITY_CHOICES = [    ('H', 'High'),    ('M', 'Medium'),    ('L', 'Low'),]
-    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='M')
+    PRIORITY_CHOICES = [    ('High', 'High'),    ('Medium', 'Medium'),    ('Low', 'Low'),]
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='Medium')
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None)
     name = models.CharField(max_length=255)
     description = models.TextField(default='Task Description')
